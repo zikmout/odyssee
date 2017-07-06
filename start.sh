@@ -12,7 +12,7 @@ echo "---------------------------------------------------------\n"
 
 echo "--------------- Now lets run the image ---------------\n"
 #docker run -it -v /home/zak/Projects/docker/mission03/shared:/home/zikmout/_shared -d -p 80:80 mission2:v1
-docker run -it -d odyssee:t1
+docker run -it -v `pwd`/html:/var/www/html -d odyssee:t1
 echo "------------------------------------------------------\n"
 
 echo "--------------- And see the result of curl ---------------\n"

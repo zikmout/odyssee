@@ -30,7 +30,7 @@ ENV LC_ALL C.UTF-8
 
 ENV NAME toto
 
-ADD index.html /var/www/html/index.html
+#ADD index.html /var/www/html/index.html
 
 RUN mkdir -p /var/log/supervisor
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
