@@ -29,7 +29,9 @@ RUN dpkg-reconfigure locales && \
 ENV LC_ALL C.UTF-8
 
 ENV NAME toto
-
+#TEST
+RUN pip install plotly
+RUN pip install plotly --upgrade
 #ADD index.html /var/www/html/index.html
 
 RUN mkdir -p /var/log/supervisor
