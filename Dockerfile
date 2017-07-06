@@ -17,13 +17,18 @@ RUN apt-get update && apt-get install -y \
     python-pip \
     nginx \
     openssh-server \
-    supervisor
+    supervisor \
+    curl \
+    wget \
+    zsh
 
 RUN dpkg-reconfigure locales && \
     locale-gen C.UTF-8 && \
     /usr/sbin/update-locale LANG=C.UTF-8
 
 ENV LC_ALL C.UTF-8
+
+ENV NAME toto
 
 ADD index.html /var/www/html/index.html
 
@@ -42,10 +47,14 @@ RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so
 ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
 
+#RUN echo "export SHELL=/bin/zsh" >> /etc/profile
+
 #EXPOSE 22
 #CMD ["/usr/sbin/sshd", "-D"]
 
 #-----------------------------------------------------------------------------
+
+RUN curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh | bash
 
 EXPOSE 80 22
 
