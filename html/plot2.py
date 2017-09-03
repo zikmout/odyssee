@@ -39,14 +39,16 @@ def test_run():
 
     #Ploting data
     ax1=plt.subplot(2, 1, 1)
-    plt.plot(df['Time'], df['price'])
+    plt.plot(df['Time'], df[['price','ma5', 'ma10']])
     plt.gcf().autofmt_xdate()
 
     #ax1.plot(df['price'])
 
-    ax2=plt.subplot(2, 1, 2)
+    ax2=plt.subplot(2, 1, 2, sharex = ax1)
     plt.plot(df['Time'], df['volume'])
     plt.gcf().autofmt_xdate()
+
+
     plt.show()
 
     #df = df2
