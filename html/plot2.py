@@ -7,22 +7,12 @@ import plotly.graph_objs as go
 import pandas_datareader.data as web
 from datetime import datetime
 
-import mpl_finance as mpf
-
-import json
-
-class FileItem(dict):
-    def __init__(self, fname):
-        dict.__init__(self, fname=fname)
-
-#f = open('../data/bitcoinity_data.csv', 'r+')
-#print(json.dumps(f))
-
+import math
 #hl Time, avg, max, min
 #vol Time, price, volume
 
 def test_run():
-    df_vol = pd.read_csv('../data/bitcoinity_data_vol.csv')
+    df_vol = pd.read_csv('../data/bitcoinity_data_vol.csv', parse_dates=True)
     df_hl = pd.read_csv('../data/bitcoinity_data_hl.csv')
     df_ma5 = pd.read_csv('../data/bitcoinity_data_ma5.csv')
     df_ma10 = pd.read_csv('../data/bitcoinity_data_ma10.csv')
@@ -35,14 +25,39 @@ def test_run():
 
     df = pd.concat([df_vol, df_hl.loc[:, 'max':'min']], axis=1)
     df = df.reindex_axis(['Time', 'price', 'min', 'max', 'volume'], axis=1)
+    #df['avg5'] = pd.rolling_std(df['price'], window=365) * math.sqrt(365)
+    df['ma5'] = df.rolling(5).mean()['price']
+    df['ma10'] = df.rolling(10).mean()['price']
+    df['ma20'] = df.rolling(20).mean()['price']
+    df['ma50'] = df.rolling(50).mean()['price']
+    df['ma200'] = df.rolling(200).mean()['price']
+
+    #df['return'] = df.std(axis=1)
+    df['rstd7'] = pd.rolling_std(df['price'], 7, min_periods=1)
+    df['rstd14'] = pd.rolling_std(df['price'], 14, min_periods=1)
+    df['rstd28'] = pd.rolling_std(df['price'], 28, min_periods=1)
+
     df = np.round(df, decimals=1)
-    df = df.replace({' 00:00:00 UTC':''}, regex=True)
+    #df = df.replace({' 00:00:00 UTC':''}, regex=True)
     df['Time'] = pd.to_datetime(df['Time'], yearfirst=True)
-    #df2 = pd.concat([df, df_ma5], axis=0)
+
+    #df = df.merge(df_ma20, left_index='Time', right_on='ron', left_on='lon', how='outer')
+    #df2 = pd.concat([df, df_ma5], axis=1, join='inner')
+
     #df = pd.to_datetime(df['Time'])
     # Time, price, min, max, volume
 
     print(df)
+
+
+    ax1=plt.subplot(2, 1, 1)
+    df['price'].plot()
+
+    ax1.plot(df['price'])
+
+    ax2=plt.subplot(2, 1, 2)
+    df['volume'].plot()
+    plt.show()
 
     #df2 = df.set_index("Time")
     #df2 = np.round(df2, decimals=1)
