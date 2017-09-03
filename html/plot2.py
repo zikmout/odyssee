@@ -7,7 +7,6 @@ import plotly.graph_objs as go
 import pandas_datareader.data as web
 from datetime import datetime
 
-import sys
 import mpl_finance as mpf
 
 import json
@@ -29,22 +28,12 @@ def test_run():
 
 
     # Time, price, volume, max, min
-    #print(df_hl.loc[:, 'max':'min'])
+    print(df_hl.loc[:, 'max':'min'])
 
     df = pd.concat([df_vol, df_hl.loc[:, 'max':'min']], axis=1)
     df = df.reindex_axis(['Time', 'price', 'min', 'max', 'volume'], axis=1)
+    df = np.round(df, decimals=1)
     # Time, price, min, max, volume
-
-    df[['price', 'min', 'max']] = np.round(df[['price', 'min', 'max']], 1)
-    #df['volume'] = df.volume.astype(long)
-
-
-    #print(type(sys.maxsize+1))
-    print(df.dtypes)
-    #df['Time'] = pd.to_datetime(pd.Series(['2017-08-08']), format="%Y-%m-%d")
-    #df['volume'] = pd.to_numeric(df['volume'], errors='coerce').fillna(0)
-    #df = np.round(df.loc[:, 'price':'max'], decimals=1)
-    #df = np.round(df.loc[:, 'volume'], decimals=1)
 
     print(df)
 
