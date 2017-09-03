@@ -8,8 +8,11 @@ import pandas_datareader.data as web
 from datetime import datetime
 
 import math
+from matplotlib import style
 #hl Time, avg, max, min
 #vol Time, price, volume
+
+style.use('ggplot')
 
 def test_run():
     df_vol = pd.read_csv('../data/bitcoinity_data_vol.csv')
@@ -31,7 +34,7 @@ def test_run():
     df['rstd7'] = pd.rolling_std(df['price'], 7, min_periods=1)
     df['rstd14'] = pd.rolling_std(df['price'], 14, min_periods=1)
     df['rstd28'] = pd.rolling_std(df['price'], 28, min_periods=1)
-
+    df['volume'] = df['volume'] / 1000
     df = np.round(df, decimals=1)
     #df = df.replace({' 00:00:00 UTC':''}, regex=True)
     df['Time'] = pd.to_datetime(df['Time'], yearfirst=True)
@@ -39,8 +42,16 @@ def test_run():
 
     #Ploting data
     ax1=plt.subplot(2, 1, 1)
-    plt.plot(df['Time'], df[['price','ma5', 'ma10']])
+    plt.plot(df['Time'], df['price'], label='price')
+    plt.plot(df['Time'], df['ma5'], label='ma5')
+    plt.plot(df['Time'], df['ma10'], label='ma10')
+    plt.legend(loc="upper left", bbox_to_anchor=[0, 1],
+                       ncol=2, shadow=True, title="Legend", fancybox=True)
+    ax1.get_legend().get_title().set_color("blue")
+
     plt.gcf().autofmt_xdate()
+    plt.title('Price')
+    plt.ylabel('E')
 
     #ax1.plot(df['price'])
 
@@ -48,7 +59,9 @@ def test_run():
     plt.plot(df['Time'], df['volume'])
     plt.gcf().autofmt_xdate()
 
-
+    plt.title('Volumes')
+    plt.ylabel('kBTC')
+    plt.xlabel('time')
     plt.show()
 
     #df = df2
