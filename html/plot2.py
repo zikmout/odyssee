@@ -24,6 +24,9 @@ class FileItem(dict):
 def test_run():
     df_vol = pd.read_csv('../data/bitcoinity_data_vol.csv')
     df_hl = pd.read_csv('../data/bitcoinity_data_hl.csv')
+    df_ma5 = pd.read_csv('../data/bitcoinity_data_ma5.csv')
+    df_ma10 = pd.read_csv('../data/bitcoinity_data_ma10.csv')
+    df_ma20 = pd.read_csv('../data/bitcoinity_data_ma20.csv')
     #df[['max', 'min']].plot()
 
 
@@ -33,6 +36,10 @@ def test_run():
     df = pd.concat([df_vol, df_hl.loc[:, 'max':'min']], axis=1)
     df = df.reindex_axis(['Time', 'price', 'min', 'max', 'volume'], axis=1)
     df = np.round(df, decimals=1)
+    df = df.replace({' 00:00:00 UTC':''}, regex=True)
+    df['Time'] = pd.to_datetime(df['Time'], yearfirst=True)
+    #df2 = pd.concat([df, df_ma5], axis=0)
+    #df = pd.to_datetime(df['Time'])
     # Time, price, min, max, volume
 
     print(df)
